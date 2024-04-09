@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сайт с кнопками</title>
+    <style>
+        /* Общие стили */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        #buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+        }
+        button {
+            margin: 10px;
+            padding: 15px 20px;
+            font-size: 16px;
+            background-color: #3498db; /* синий цвет фона */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 200px; /* ширина кнопки */
+            height: 100px; /* высота кнопки */
+        }
+        button:hover {
+            background-color: #2980b9; /* изменяем цвет при наведении */
+        }
+        button.clicked {
+            background-color: #e74c3c; /* красный цвет фона при нажатии */
+        }
+        button.winner {
+            background-color: #3498db; /* голубой цвет фона для победной кнопки */
+        }
+        button.winner.clicked {
+            background-color: #2ecc71; /* зеленый цвет фона для выигрышной кнопки */
+        }
+        #result {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Создаем 100 кнопок -->
+    <div id="buttons">
+        <!-- Генерируем кнопки с помощью JavaScript -->
+    </div>
+
+    <!-- Окно с текстом "Вы выиграли" -->
+    <div id="result">
+        <h2>Вы выиграли!</h2>
+        <button onclick="playAgain()">Сыграть еще раз</button>
+    </div>
+
+    <script>
+        var buttonsContainer = document.getElementById('buttons');
+        var resultDiv = document.getElementById('result');
+        var winningButtonIndex;
+
+        // Создаем 100 кнопок
+        for (var i = 1; i <= 100; i++) {
+            var button = document.createElement('button');
+            button.textContent = 'Кнопка ' + i;
+            button.onclick = function() {
+                checkWinner(this);
+            };
+            buttonsContainer.appendChild(button);
+        }
+
+        // Выбираем случайную победную кнопку
+        function chooseWinningButton() {
+            winningButtonIndex = Math.floor(Math.random() * 100);
+            var buttons = document.getElementsByTagName('button');
+            buttons[winningButtonIndex].classList.add('winner'); // Добавляем класс для победной кнопки
+        }
+        chooseWinningButton(); // Вызываем функцию при загрузке страницы
+
+        function checkWinner(button) {
+            // Проверяем, является ли кнопка "победной"
+            if (button.textContent === 'Кнопка ' + (winningButtonIndex + 1)) {
+                button.classList.add('clicked'); // Добавляем класс для изменения цвета
+                resultDiv.style.display = 'block';
+            } else {
+                button.classList.add('clicked'); // Добавляем класс для изменения цвета
+                button.disabled = true; // Отключаем кнопку, чтобы ее нельзя было нажать снова
+            }
+        }
+
+        function playAgain() {
+            resultDiv.style.display = 'none'; // Скрываем окно с результатом
+            chooseWinningButton(); // Выбираем новую победную кнопку
+            var buttons = document.getElementsByTagName('button');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove('clicked'); // Удаляем классы для изменения цвета
+                buttons[i].disabled = false; // Включаем кнопки
+            }
+        }
+    </script>
+</body>
+</html>
